@@ -1,9 +1,6 @@
 namespace server.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using server.Models;
 
@@ -12,7 +9,7 @@ namespace server.Controllers
     public class NotesController : ControllerBase
     {
         [HttpGet]
-        public void Get()
+        public IActionResult Get()
         {
             var category = new Category();
             var user = new User();
@@ -23,13 +20,14 @@ namespace server.Controllers
                 new Note() { Id=3, Title="title3", Comment="Test3", Category=category, CreatedDate=DateTime.Now, ModifiedDate=DateTime.Now, User=user },
             };
 
-            this.Ok(notes);
+            return this.Ok(notes);
         }
 
         [HttpPost]
-        public void Create(Note note)
+        public IActionResult Create(Note note)
         {
-            this.Ok(note);
+            var path = string.Format("{0}{1}", this.HttpContext.Request.Host, this.HttpContext.Request.Path);
+            return this.Created(path, note);
         }
     }
 }
