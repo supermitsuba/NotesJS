@@ -2,12 +2,12 @@ using System;
 
 namespace server.Models
 {
-    public class Category
+    public class Category : IDatabaseObject
     {
-        public int Id { get; internal set; }
-        public string Name { get; internal set; }
-        public User User { get; internal set; }
-        public DateTime ModifiedDate { get; internal set; }
-        public DateTime CreatedDate { get; internal set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public User User { get; set; }
+        public DateTime ModifiedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

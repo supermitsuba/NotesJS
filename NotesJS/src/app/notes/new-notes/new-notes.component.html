@@ -10,7 +10,7 @@
     <div class="form-group col-md-4">
         <label for="inputCategory">Category</label>
         <select id="inputCategory" class="form-control" name="category" [(ngModel)]="note.category">
-            <option *ngFor="let category of categories" [ngValue]="category.name">{{category.name}}</option>
+            <option *ngFor="let category of categories" [ngValue]="category">{{category.name}}</option>
         </select>
     </div>
 </form>

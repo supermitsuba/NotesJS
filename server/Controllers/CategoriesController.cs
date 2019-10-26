@@ -1,30 +1,35 @@
 namespace server.Controllers
 {
     using System;
+    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
     using server.Models;
+    using server.Services;
 
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
     {
+        private readonly IDatabaseService service;
+
+        public CategoriesController(IDatabaseService service)
+        {
+            this.service = service;
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
-            var categories = new Category[]{
-                new Category() { Id= 1, Name="a", CreatedDate= new DateTime(), ModifiedDate= new DateTime(), User= new User() },
-                new Category() { Id= 1, Name="b", CreatedDate= new DateTime(), ModifiedDate= new DateTime(), User= new User() },
-                new Category() { Id= 1, Name="c", CreatedDate= new DateTime(), ModifiedDate= new DateTime(), User= new User() },
-            };
-
+            var categories = this.service.GetAllCategory();
             return this.Ok(categories);
         }
 
         [HttpPost]
-        public IActionResult Create(Category note)
+        public IActionResult Create(Category category)
         {
             var path = string.Format("{0}{1}", this.HttpContext.Request.Host, this.HttpContext.Request.Path);
-            return this.Created(path, note);
+            var savedCategory = this.service.SaveCategory(category);
+            return this.Created(path, savedCategory);
         }
     }
 }

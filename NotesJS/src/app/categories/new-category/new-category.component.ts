@@ -9,24 +9,25 @@ import { Category } from 'src/app/models/category';
 })
 export class NewCategoryComponent implements OnInit {
 
-  category: Category;
+  name: string;
 
   constructor(private categoryService: CategoryService) { }
 
   ngOnInit() {
-    this.category = new Category();
-    this.category.name = '';
   }
 
   addCategory() {
-    this.categoryService.addNewCategory(this.category)
+    let newCategory = new Category();
+    newCategory.name = this.name;
+
+    this.categoryService.addNewCategory(newCategory)
         .subscribe(
           p => {
-            alert('Saved '+ this.category.name);
-            this.category.name = '';
+            alert('Saved '+ this.name);
+            this.name = '';
           }, 
           error => {
-            alert('Could not save categoryName: '+ this.category.name);
+            alert('Could not save categoryName: '+ this.name);
             console.log(error);
           });
   }

@@ -2,9 +2,9 @@ namespace server.Models
 {
     using System;
     
-    public class Note
+    public class Note: IDatabaseObject
     {
-        public int Id {get;set;}
+        public Guid Id {get;set;}
         public string Title {get;set;}
         public string Comment{get;set;} 
         public Category Category {get;set;} 

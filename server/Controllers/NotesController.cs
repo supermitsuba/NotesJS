@@ -1,25 +1,26 @@
 namespace server.Controllers
 {
     using System;
+    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
     using server.Models;
+    using server.Services;
 
     [Route("api/[controller]")]
     [ApiController]
     public class NotesController : ControllerBase
     {
+        private readonly IDatabaseService service;
+
+        public NotesController(IDatabaseService service)
+        {
+            this.service = service;
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
-            var category = new Category();
-            var user = new User();
-            var notes = new Note[]
-            {
-                new Note() { Id=1, Title="title1", Comment="Test1", Category=category, CreatedDate=DateTime.Now, ModifiedDate=DateTime.Now, User=user },
-                new Note() { Id=2, Title="title2", Comment="Test2", Category=category, CreatedDate=DateTime.Now, ModifiedDate=DateTime.Now, User=user },
-                new Note() { Id=3, Title="title3", Comment="Test3", Category=category, CreatedDate=DateTime.Now, ModifiedDate=DateTime.Now, User=user },
-            };
-
+            var notes = this.service.GetAllNotes();
             return this.Ok(notes);
         }
 
@@ -27,7 +28,8 @@ namespace server.Controllers
         public IActionResult Create(Note note)
         {
             var path = string.Format("{0}{1}", this.HttpContext.Request.Host, this.HttpContext.Request.Path);
-            return this.Created(path, note);
+            var savedNote = this.service.SaveNote(note);
+            return this.Created(path, savedNote);
         }
     }
 }

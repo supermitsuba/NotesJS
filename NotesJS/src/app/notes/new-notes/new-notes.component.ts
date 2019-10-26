@@ -3,6 +3,7 @@ import { CategoryService } from 'src/app/services/category.service';
 import { Category } from 'src/app/models/category';
 import { Note } from 'src/app/models/note';
 import { NoteService } from 'src/app/services/note.service';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-new-notes',
@@ -22,6 +23,7 @@ export class NewNotesComponent implements OnInit {
     this.note = new Note();
     this.note.comment = '';
     this.note.title = '';
+
     this.getAllCategories();
   }
 

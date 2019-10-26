@@ -2,7 +2,7 @@ import { Category } from './category';
 import { User } from './user';
 
 export class Note {
-    id: number;
+    id: string;
     title: string;
     comment: string;
     category: Category;
