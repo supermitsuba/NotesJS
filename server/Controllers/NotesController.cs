@@ -1,12 +1,10 @@
 namespace server.Controllers
 {
     using System;
-    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
     using server.Models;
     using server.Services;
 
-    [Route("api/[controller]")]
     [ApiController]
     public class NotesController : ControllerBase
     {
@@ -18,6 +16,7 @@ namespace server.Controllers
         }
 
         [HttpGet]
+        [Route("api/notes")]
         public IActionResult Get()
         {
             var notes = this.service.GetAllNotes();
@@ -25,11 +24,19 @@ namespace server.Controllers
         }
 
         [HttpPost]
+        [Route("api/notes")]
         public IActionResult Create(Note note)
         {
             var path = string.Format("{0}{1}", this.HttpContext.Request.Host, this.HttpContext.Request.Path);
             var savedNote = this.service.SaveNote(note);
             return this.Created(path, savedNote);
+        }
+
+        [HttpDelete]
+        [Route("api/notes/{id:Guid}")]
+        public IActionResult Delete(Guid id) {
+            this.service.DeleteNote(id);
+            return this.Ok();
         }
     }
 }

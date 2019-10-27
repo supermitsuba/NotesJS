@@ -10,18 +10,25 @@ namespace server.Services
     public class FileService : IDatabaseService
     {
         public const string saveLocation = "./data";
-        public string noteSaveLocation = Path.Combine(saveLocation, "notes");
+        public readonly string noteSaveLocation = Path.Combine(saveLocation, "notes");
+        public readonly string noteNotActiveLocation = "";
         public string categorySaveLocation = Path.Combine(saveLocation, "categories");
         public string userSaveLocation = Path.Combine(saveLocation, "users");
 
         public FileService()
         {
+            this.noteNotActiveLocation = Path.Combine(noteSaveLocation, "empty");
+
             if(!Directory.Exists(saveLocation)) {
                 Directory.CreateDirectory(saveLocation);
             }
 
             if(!Directory.Exists(noteSaveLocation)) {
                 Directory.CreateDirectory(noteSaveLocation);
+            }
+
+            if(!Directory.Exists(noteNotActiveLocation)) {
+                Directory.CreateDirectory(noteNotActiveLocation);
             }
 
             if(!Directory.Exists(categorySaveLocation)) {
@@ -61,6 +68,12 @@ namespace server.Services
         public List<Category> GetAllCategory()
         {
             return this.GetAllObjects<Category>(this.categorySaveLocation);
+        }
+
+        public void DeleteNote(Guid id) {
+            var path1 = Path.Combine(this.noteSaveLocation, $"{id}.json");
+            var path2 = Path.Combine(this.noteNotActiveLocation, $"{id}.json");
+            File.Move(path1, path2);
         }
 
         private T SaveObject<T>(T newObject, string path) where T : IDatabaseObject

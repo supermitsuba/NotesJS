@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Note } from 'src/app/models/note';
 import { NoteService } from 'src/app/services/note.service';
-import { SelectCategoryComponent } from 'src/app/categories/select-category/select-category.component';
 import { Category } from 'src/app/models/category';
 
 @Component({
@@ -23,5 +22,20 @@ export class ViewNotesComponent implements OnInit {
 
   receiveMessage(selectedCategory: Category) {
     this.notes = this.cachedNotes.filter( note => note && note.category && note.category.name === selectedCategory.name);
+  }
+
+  onDelete(deletedNote: Note) {
+    const n = deletedNote;
+    this.noteService.deleteNotes(deletedNote)
+      .subscribe(
+        response => {
+          alert('Deleted ');
+          this.notes = this.notes.filter(note => note.id !== n.id);
+          this.cachedNotes = this.cachedNotes.filter(note => note.id !== n.id);
+        }, 
+        error => {
+          alert('Could not delete note.');
+          console.log(error);
+        });
   }
 }

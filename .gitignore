@@ -63,3 +63,5 @@ typings/
 server/data
 
 server/bin
+
+server/obj

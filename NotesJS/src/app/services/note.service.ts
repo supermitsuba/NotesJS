@@ -22,4 +22,8 @@ export class NoteService {
   public getAllNotes():Observable<Note[]> {
     return this.http.get<Note[]>(this.baseUrl);
   }
+
+  public deleteNotes(note: Note): Observable<any> {
+    return this.http.delete(this.baseUrl+'/'+note.id);
+  }
 }
