@@ -9,6 +9,8 @@ import { NewCategoryComponent } from './categories/new-category/new-category.com
 import { NewNotesComponent } from './notes/new-notes/new-notes.component';
 import { ViewNotesComponent } from './notes/view-notes/view-notes.component';
 import { DashboardComponent } from './shared/dashboard/dashboard.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { DashboardComponent } from './shared/dashboard/dashboard.component';
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
