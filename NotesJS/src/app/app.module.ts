@@ -11,6 +11,7 @@ import { ViewNotesComponent } from './notes/view-notes/view-notes.component';
 import { DashboardComponent } from './shared/dashboard/dashboard.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { SelectCategoryComponent } from './categories/select-category/select-category.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { environment } from '../environments/environment';
     NewCategoryComponent,
     NewNotesComponent,
     ViewNotesComponent,
-    DashboardComponent
+    DashboardComponent,
+    SelectCategoryComponent
   ],
   imports: [
     BrowserModule,

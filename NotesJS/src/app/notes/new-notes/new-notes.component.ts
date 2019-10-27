@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CategoryService } from 'src/app/services/category.service';
 import { Category } from 'src/app/models/category';
 import { Note } from 'src/app/models/note';
 import { NoteService } from 'src/app/services/note.service';
 import { User } from 'src/app/models/user';
+import { SelectCategoryComponent } from 'src/app/categories/select-category/select-category.component';
 
 @Component({
   selector: 'app-new-notes',
@@ -13,18 +14,18 @@ import { User } from 'src/app/models/user';
 export class NewNotesComponent implements OnInit {
 
   public note: Note;
-  public categories: Category[];
 
   constructor(
-    private categoryService: CategoryService, 
     private noteService: NoteService) { }
 
   ngOnInit() {
     this.note = new Note();
     this.note.comment = '';
     this.note.title = '';
+  }
 
-    this.getAllCategories();
+  receiveMessage(selectedCategory: Category) {
+    this.note.category = selectedCategory;
   }
 
   public addNote() {
@@ -39,12 +40,5 @@ export class NewNotesComponent implements OnInit {
             alert('Could not save note.');
             console.log(error);
           });
-  }
-
-  public getAllCategories() {
-    this.categoryService.getAllCategories()
-        .subscribe( c => {
-          this.categories = c
-        });
   }
 }
