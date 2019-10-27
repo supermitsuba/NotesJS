@@ -20,15 +20,20 @@ export class NewCategoryComponent implements OnInit {
     let newCategory = new Category();
     newCategory.name = this.name;
 
-    this.categoryService.addNewCategory(newCategory)
-        .subscribe(
-          p => {
-            alert('Saved '+ this.name);
-            this.name = '';
-          }, 
-          error => {
-            alert('Could not save categoryName: '+ this.name);
-            console.log(error);
-          });
+    if(this.name && this.name.trim() !== '') {
+      this.categoryService.addNewCategory(newCategory)
+          .subscribe(
+            p => {
+              alert('Saved '+ this.name);
+              this.name = '';
+            }, 
+            error => {
+              alert('Could not save categoryName: '+ this.name);
+              console.log(error);
+            });
+      return;
+    }
+
+    alert('This is an invalid category!');
   }
 }
