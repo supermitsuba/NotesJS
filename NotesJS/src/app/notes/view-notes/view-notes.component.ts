@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Note } from 'src/app/models/note';
 import { NoteService } from 'src/app/services/note.service';
 import { Category } from 'src/app/models/category';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-view-notes',
@@ -37,5 +38,9 @@ export class ViewNotesComponent implements OnInit {
           alert('Could not delete note.');
           console.log(error);
         });
+  }
+
+  displayLastUpdated(note: Note): string {
+    return moment(note.modifiedDate).fromNow();
   }
 }
