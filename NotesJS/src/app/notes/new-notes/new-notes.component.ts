@@ -49,10 +49,9 @@ export class NewNotesComponent implements OnInit {
   }
 
   isValid(): boolean {
-    const isCommentValid:boolean = this.note.comment && this.note.comment.trim() !== '';
     const isTitleValid:boolean = this.note.title && this.note.title.trim() !== '';
     const isCategoryValid:boolean = !!this.note.category;
 
-    return isCommentValid && isTitleValid && isCategoryValid;
+    return isCategoryValid && isTitleValid;
   }
 }
