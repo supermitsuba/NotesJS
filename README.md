@@ -23,9 +23,9 @@ There is a front end Angular 8 app and a back end server written in .net.  To or
 1. Angular
 
 The build script is under "./NotesJS/build.sh"
-Build software example: ```sudo ./build.sh "tag1" "localhost" true```
+Build software example: ```sudo ./build.sh "tag1" true```
 
-This will build and upload the latest image of the software to docker hub.  The first parameter is for tag version.  The second is the API server.  The third is just optional, if it exists, then it will upload to docker hub.  
+This will build and upload the latest image of the software to docker hub.  The first parameter is for tag version.  The second is just optional, if it exists, then it will upload to docker hub.  
 
 To run the docker image: ``` docker run -d -p 8080:8080 supermitsuba/notejs:test ```
 
@@ -36,7 +36,7 @@ Note here that 8080 is the internal port to run the web app from.
 The build script is under "./server/build.sh"
 Build software example: ``` sudo ./build.sh "tag1" true```
 
-Very similar to the Angular build script, except there is no API server parameter.  The first parametre is the tag name.  The last paramter, if it exists, will push the image to docker hub.
+Very similar to the Angular build script.  The first parametre is the tag name.  The last paramter, if it exists, will push the image to docker hub.
 
 To run the docker image: ``` docker run -d -p 5000:80 -v /host/notes:/app/data supermitsuba/notesjs-webapi:test ```
 
