@@ -65,3 +65,7 @@ server/data
 server/bin
 
 server/obj
+
+NotesJS/src/environments/environment.prod.ts
+
+NotesJS/dist
