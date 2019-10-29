@@ -1,6 +1,7 @@
 namespace server.Controllers
 {
     using System;
+    using System.Linq;
     using Microsoft.AspNetCore.Mvc;
     using server.Models;
     using server.Services;
@@ -19,7 +20,7 @@ namespace server.Controllers
         [Route("api/notes")]
         public IActionResult Get()
         {
-            var notes = this.service.GetAllNotes();
+            var notes = this.service.GetAllNotes().OrderByDescending(n => n.ModifiedDate);
             return this.Ok(notes);
         }
 

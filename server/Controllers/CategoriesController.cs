@@ -1,6 +1,7 @@
 namespace server.Controllers
 {
     using System;
+    using System.Linq;
     using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
     using server.Models;
@@ -20,7 +21,7 @@ namespace server.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var categories = this.service.GetAllCategory();
+            var categories = this.service.GetAllCategory().OrderByDescending(c => c.CreatedDate);
             return this.Ok(categories);
         }
 
