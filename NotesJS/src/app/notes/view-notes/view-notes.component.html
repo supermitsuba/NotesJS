@@ -2,6 +2,10 @@
     <app-select-category (messageEvent)="receiveMessage($event)"></app-select-category>
 </div>
 
+<div class="category">
+    last refreshed: {{ getDateTime() }}
+</div>
+
 <div class="row">
     <div *ngFor="let note of notes" class="c card border-info mb-3">
         <div class="card-header text-white bg-dark">

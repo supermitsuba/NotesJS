@@ -27,20 +27,25 @@ export class ViewNotesComponent implements OnInit {
 
   onDelete(deletedNote: Note) {
     const n = deletedNote;
-    this.noteService.deleteNotes(deletedNote)
-      .subscribe(
-        response => {
-          alert('Deleted ');
-          this.notes = this.notes.filter(note => note.id !== n.id);
-          this.cachedNotes = this.cachedNotes.filter(note => note.id !== n.id);
-        }, 
-        error => {
-          alert('Could not delete note.');
-          console.log(error);
-        });
+    if (confirm("Are you sure you want to delete?")) {
+      this.noteService.deleteNotes(deletedNote)
+        .subscribe(
+          response => {
+            this.notes = this.notes.filter(note => note.id !== n.id);
+            this.cachedNotes = this.cachedNotes.filter(note => note.id !== n.id);
+          }, 
+          error => {
+            alert('Could not delete note.');
+            console.log(error);
+          });
+        }
   }
 
   displayLastUpdated(note: Note): string {
     return moment(note.modifiedDate).fromNow();
+  }
+
+  getDateTime(): string {
+    return moment().format("MMMM Do YYYY, h:mm a");
   }
 }
