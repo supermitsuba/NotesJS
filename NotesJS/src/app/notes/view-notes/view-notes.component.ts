@@ -3,6 +3,9 @@ import { Note } from 'src/app/models/note';
 import { NoteService } from 'src/app/services/note.service';
 import { Category } from 'src/app/models/category';
 import * as moment from 'moment';
+import { SelectCategoryComponent } from 'src/app/categories/select-category/select-category.component';
+import { Observable } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-view-notes',
@@ -11,18 +14,24 @@ import * as moment from 'moment';
 })
 export class ViewNotesComponent implements OnInit {
 
-  notes: Note[];
-  cachedNotes: Note[];
+  notes: Observable<Note[]>;
+  cachedNotes: Observable<Note[]>;  
 
   constructor(private noteService: NoteService) { }
 
   ngOnInit() {
-    this.noteService.getAllNotes()
-        .subscribe(n => { this.notes = n; this.cachedNotes = n })
+    this.cachedNotes = this.noteService.getAllNotes();
+    this.notes = this.cachedNotes;
   }
 
-  receiveMessage(selectedCategory: Category) {
-    this.notes = this.cachedNotes.filter( note => note && note.category && note.category.name === selectedCategory.name);
+  receiveMessage(category: Category) {
+    if(category.id === "All") {
+      this.notes = this.cachedNotes;
+    } else {
+      this.notes = this.cachedNotes.pipe(
+        map(notez => notez.filter(note => note.category && note.category.name === category.name))
+      );
+    }
   }
 
   onDelete(deletedNote: Note) {
@@ -31,8 +40,12 @@ export class ViewNotesComponent implements OnInit {
       this.noteService.deleteNotes(deletedNote)
         .subscribe(
           response => {
-            this.notes = this.notes.filter(note => note.id !== n.id);
-            this.cachedNotes = this.cachedNotes.filter(note => note.id !== n.id);
+            this.notes = this.notes.pipe(
+              map(notez => notez.filter(note => note.id !== n.id))
+            );
+            this.cachedNotes = this.cachedNotes.pipe(
+              map(notez => notez.filter(note => note.id !== n.id))
+            );
           }, 
           error => {
             alert('Could not delete note.');

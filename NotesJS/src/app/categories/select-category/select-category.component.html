@@ -1,6 +1,6 @@
 <div class="form-group col-md-4 category">
     <label for="inputCategory">Category</label>
     <select id="inputCategory" class="form-control" name="category" (change)="onChange(selectedCategory)" [(ngModel)]="selectedCategory">
-        <option *ngFor="let category of categories" [ngValue]="category">{{category.name}}</option>
+        <option *ngFor="let category of categories" [(selected)]="category === selectedCategory" [ngValue]="category">{{category.name}}</option>
     </select>
 </div>

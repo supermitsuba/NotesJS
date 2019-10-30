@@ -1,5 +1,5 @@
 <div class="category">
-    <app-select-category (messageEvent)="receiveMessage($event)"></app-select-category>
+    <app-select-category hasAllSelection="true" defaultIndex="0" useStoredCategory="true" (messageEvent)="receiveMessage($event)"></app-select-category>
 </div>
 
 <div class="category">
@@ -7,7 +7,7 @@
 </div>
 
 <div class="row">
-    <div *ngFor="let note of notes" class="c card border-info mb-3">
+    <div *ngFor="let note of (notes | async)" class="c card border-info mb-3">
         <div class="card-header text-white bg-dark">
             <h5 class="header">{{note.title}}</h5>
             <button type="button" (click)="onDelete(note)" class="header close text-white" aria-label="Close">

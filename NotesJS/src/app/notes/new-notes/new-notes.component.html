@@ -8,7 +8,7 @@
             <label for="inputComment">Comment</label>
             <textarea class="form-control" id="inputComment" rows="3" name="comment" [(ngModel)]="note.comment"></textarea>
         </div>
-        <app-select-category class="category" (messageEvent)="receiveMessage($event)"></app-select-category>
+        <app-select-category class="category" useStoredCategory="false" hasAllSelection="false" defaultIndex="-1" (messageEvent)="receiveMessage($event)"></app-select-category>
     <!-- </form> -->
 
     <div class="input-group input-group-lg">
