@@ -3,9 +3,8 @@ import { Note } from 'src/app/models/note';
 import { NoteService } from 'src/app/services/note.service';
 import { Category } from 'src/app/models/category';
 import * as moment from 'moment';
-import { SelectCategoryComponent } from 'src/app/categories/select-category/select-category.component';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-view-notes',
@@ -15,13 +14,17 @@ import { filter, map, tap } from 'rxjs/operators';
 export class ViewNotesComponent implements OnInit {
 
   notes: Observable<Note[]>;
-  cachedNotes: Observable<Note[]>;  
+  cachedNotes: Observable<Note[]>;
+  search: string;
+  selectedCategory: Category;
+  currentDateTime: string;
 
   constructor(private noteService: NoteService) { }
 
   ngOnInit() {
     this.cachedNotes = this.noteService.getAllNotes();
     this.notes = this.cachedNotes;
+    this.currentDateTime = moment().format("MMMM Do YYYY, h:mm a");
   }
 
   receiveMessage(category: Category) {
@@ -32,6 +35,8 @@ export class ViewNotesComponent implements OnInit {
         map(notez => notez.filter(note => note.category && note.category.name === category.name))
       );
     }
+
+    this.selectedCategory = category;
   }
 
   onDelete(deletedNote: Note) {
@@ -59,6 +64,17 @@ export class ViewNotesComponent implements OnInit {
   }
 
   getDateTime(): string {
-    return moment().format("MMMM Do YYYY, h:mm a");
+    return this.currentDateTime;
+  }
+
+  onTextChange() {
+    if(this.search.length > 2){
+      this.notes = this.cachedNotes.pipe(
+        map(notez => notez.filter(note => note.title.includes(this.search) || note.comment.includes(this.search))),
+        map(notez => notez.filter(note => note.category && note.category.name === this.selectedCategory.name))
+      );
+    } else {
+      this.receiveMessage(this.selectedCategory);
+    }
   }
 }

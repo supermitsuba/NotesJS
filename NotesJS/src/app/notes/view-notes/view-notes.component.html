@@ -6,6 +6,11 @@
     last refreshed: {{ getDateTime() }}
 </div>
 
+<div class="category">
+    search: 
+    <input type="text" class="form-control" (input)="onTextChange()" aria-label="Large" aria-describedby="inputGroup-sizing-sm" [(ngModel)]="search" />
+</div>
+
 <div class="row">
     <div *ngFor="let note of (notes | async)" class="c card border-info mb-3">
         <div class="card-header text-white bg-dark">
