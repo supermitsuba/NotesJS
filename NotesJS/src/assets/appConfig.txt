@@ -1,3 +1,4 @@
 {
-  "apiAddress": "http://localhost:5000"
+  "apiAddress": "http://localhost:5000",
+  "enableEdit" : false
 }

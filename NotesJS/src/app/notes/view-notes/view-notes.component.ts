@@ -4,7 +4,9 @@ import { NoteService } from 'src/app/services/note.service';
 import { Category } from 'src/app/models/category';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap, filter, switchMap } from 'rxjs/operators';
+import { AppConfigService } from 'src/app/services/app-config.service';
+import { AppConfiguration } from 'src/app/models/appConfiguration';
 
 @Component({
   selector: 'app-view-notes',
@@ -15,16 +17,21 @@ export class ViewNotesComponent implements OnInit {
 
   notes: Observable<Note[]>;
   cachedNotes: Observable<Note[]>;
+  config: Observable<AppConfiguration>;
+  isEditEnabled: boolean;
   search: string;
   selectedCategory: Category;
   currentDateTime: string;
 
-  constructor(private noteService: NoteService) { }
+  constructor(private noteService: NoteService, private configService: AppConfigService) { }
 
   ngOnInit() {
     this.cachedNotes = this.noteService.getAllNotes();
     this.notes = this.cachedNotes;
     this.currentDateTime = moment().format("MMMM Do YYYY, h:mm a");
+    this.config = this.configService.getConfiguration();
+    this.config.pipe(map(c => c.enableEdit && c.enableEdit === true))
+                .subscribe(isValid => this.isEditEnabled = isValid);
   }
 
   receiveMessage(category: Category) {
@@ -83,5 +90,9 @@ export class ViewNotesComponent implements OnInit {
     const lowerTitle = note.title.toLowerCase();
     const lowerComment = note.comment.toLowerCase();
     return lowerTitle.includes(lowerSearch) || lowerComment.includes(lowerSearch);
+  }
+
+  onEdit(note: Note) {
+    console.log('edit')
   }
 }
