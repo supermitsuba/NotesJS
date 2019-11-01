@@ -5,6 +5,7 @@ namespace server.Controllers
     using Microsoft.AspNetCore.Mvc;
     using server.Models;
     using server.Services;
+    using server.Exception;
 
     [ApiController]
     public class NotesController : ControllerBase
@@ -31,6 +32,26 @@ namespace server.Controllers
             var path = string.Format("{0}{1}", this.HttpContext.Request.Host, this.HttpContext.Request.Path);
             var savedNote = this.service.SaveNote(note);
             return this.Created(path, savedNote);
+        }
+
+        [HttpPut]
+        [Route("api/notes")]
+        public IActionResult Update(Note note)
+        {
+            var path = string.Format("{0}{1}", this.HttpContext.Request.Host, this.HttpContext.Request.Path);
+            try
+            {
+                note = this.service.UpdateNote(note);
+            }
+            catch(NotFoundException e)
+            {
+                return this.NotFound($"{path}");
+            }
+            catch(ConflictException e)
+            {
+                return this.Conflict();
+            }
+            return this.Ok(note);
         }
 
         [HttpDelete]

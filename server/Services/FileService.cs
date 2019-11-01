@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
-using server.Models;
-
 namespace server.Services 
 {
-    
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using Newtonsoft.Json;
+    using server.Models;
+    using server.Exception;
+
     public class FileService : IDatabaseService
     {
         public const string saveLocation = "./data";
@@ -60,6 +60,10 @@ namespace server.Services
             return this.SaveObject(newCategory, this.categorySaveLocation);
         }
 
+        public Note UpdateNote(Note updateNote) {
+            return this.UpdateObject<Note>(updateNote, this.noteSaveLocation);
+        }
+
         public List<Note> GetAllNotes()
         {
             return this.GetAllObjects<Note>(this.noteSaveLocation);
@@ -82,6 +86,29 @@ namespace server.Services
             var savePath = Path.Combine(path, $"{newObject.Id}.json");
             File.WriteAllText(savePath, data);
             return newObject;
+        }
+
+        private T UpdateObject<T>(T updateObject, string saveLocation) where T : IDatabaseObject
+        { 
+            var path = Path.Combine(saveLocation, $"{updateObject.Id}.json");
+            if (!File.Exists(path))
+            {
+                throw new NotFoundException();
+            }
+
+            var oldObject = JsonConvert.DeserializeObject<T>(File.ReadAllText(path));
+            if(oldObject.ModifiedDate < updateObject.ModifiedDate)
+            {
+                var data = JsonConvert.SerializeObject(updateObject);
+                File.WriteAllText(path, data);
+            }
+            else 
+            {
+                updateObject = oldObject;
+                throw new ConflictException();
+            }
+
+            return updateObject;
         }
 
         private List<T> GetAllObjects<T>(string path)
