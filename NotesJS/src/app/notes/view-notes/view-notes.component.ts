@@ -70,11 +70,18 @@ export class ViewNotesComponent implements OnInit {
   onTextChange() {
     if(this.search.length > 2){
       this.notes = this.cachedNotes.pipe(
-        map(notez => notez.filter(note => note.title.includes(this.search) || note.comment.includes(this.search))),
-        map(notez => notez.filter(note => note.category && note.category.name === this.selectedCategory.name))
+        map(notez => notez.filter(note => this.isSearchValid(note, this.search))),
+        map(notez => notez.filter(note => this.selectedCategory.id === 'All' || (note.category && note.category.name === this.selectedCategory.name)))
       );
     } else {
       this.receiveMessage(this.selectedCategory);
     }
+  }
+
+  isSearchValid(note:Note, search: string) : boolean {
+    const lowerSearch = search.toLowerCase();
+    const lowerTitle = note.title.toLowerCase();
+    const lowerComment = note.comment.toLowerCase();
+    return lowerTitle.includes(lowerSearch) || lowerComment.includes(lowerSearch);
   }
 }
