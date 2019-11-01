@@ -30,6 +30,20 @@ export class NoteService {
     );
   }
 
+  public getNoteById(id: string): Observable<Note> {
+    var newId = id;
+    return this.configuration.pipe(
+      switchMap(config => this.http.get<Note>(`${config.apiAddress}/${newId}`))
+    );
+  }
+
+  public updateNote(note: Note): Observable<Note> {
+    var newNote = note;
+    return this.configuration.pipe(
+      switchMap(config => this.http.put<Note>(`${config.apiAddress}/${newNote.id}`, newNote))
+    );
+  }
+
   public deleteNotes(note: Note): Observable<any> {
     return this.configuration.pipe(
       switchMap(config => this.http.delete(`${config.apiAddress}/${note.id}`))

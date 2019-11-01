@@ -2,6 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Category } from 'src/app/models/category';
 import { Note } from 'src/app/models/note';
 import { NoteService } from 'src/app/services/note.service';
+import { ActivatedRoute } from '@angular/router';
+import * as moment from 'moment';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-new-notes',
@@ -13,12 +16,25 @@ export class NewNotesComponent implements OnInit {
   public note: Note;
 
   constructor(
-    private noteService: NoteService) { }
+    private noteService: NoteService,
+    private route: ActivatedRoute,
+    private location: Location) { }
 
   ngOnInit() {
-    this.note = new Note();
-    this.note.comment = '';
-    this.note.title = '';
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.noteService.getNoteById(id).subscribe(n => {
+        this.note = n;
+      }, err => {
+        alert('Invalid id!');
+        this.location.back();
+      });
+    } else {
+      this.note = new Note();
+      this.note.id = '';
+      this.note.comment = '';
+      this.note.title = '';
+    }
   }
 
   receiveMessage(selectedCategory: Category) {
@@ -32,7 +48,8 @@ export class NewNotesComponent implements OnInit {
       return;
     }
 
-    this.noteService.addNote(this.note)
+    if(this.note.id === '') {
+        this.noteService.addNote(this.note)
         .subscribe(
           n => {
             alert('Saved ');
@@ -43,6 +60,20 @@ export class NewNotesComponent implements OnInit {
             alert('Could not save note.');
             console.log(error);
           });
+      return;
+    } else {
+      this.note.modifiedDate = new Date();
+      this.noteService.updateNote(this.note)
+          .subscribe(
+            n => {
+              alert('Updated!');
+              this.location.back();
+            }, 
+            error => {
+              alert('Could not save note.');
+              console.log(error);
+            });
+    }
   }
 
   isValid(): boolean {

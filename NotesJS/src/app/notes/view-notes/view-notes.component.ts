@@ -4,7 +4,7 @@ import { NoteService } from 'src/app/services/note.service';
 import { Category } from 'src/app/models/category';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
-import { map, tap, filter, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { AppConfigService } from 'src/app/services/app-config.service';
 import { AppConfiguration } from 'src/app/models/appConfiguration';
 
@@ -90,9 +90,5 @@ export class ViewNotesComponent implements OnInit {
     const lowerTitle = note.title.toLowerCase();
     const lowerComment = note.comment.toLowerCase();
     return lowerTitle.includes(lowerSearch) || lowerComment.includes(lowerSearch);
-  }
-
-  onEdit(note: Note) {
-    console.log('edit')
   }
 }
