@@ -15,4 +15,16 @@ export class LocalStorageService {
   set<T>(key: LocalStorageKey, value: T) {
     localStorage.setItem(key, JSON.stringify(value));
   }
+
+  clearKey(key: LocalStorageKey) {
+    localStorage.removeItem(key);
+  }
+
+  clearAll() {
+    localStorage.clear();
+  }
+
+  hasKey<T>(key: LocalStorageKey): boolean {
+    return localStorage.getItem(key) ? true : false;
+  }
 }

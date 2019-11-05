@@ -1,3 +1,5 @@
 export enum LocalStorageKey {
-    selectedCategory="selectedCategory"
+    selectedCategory="selectedCategory",
+    getAllCategories="getAllCategories",
+    getAllNotes="getAllNotes"
 }
