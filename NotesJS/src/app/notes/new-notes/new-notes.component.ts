@@ -3,7 +3,6 @@ import { Category } from 'src/app/models/category';
 import { Note } from 'src/app/models/note';
 import { NoteService } from 'src/app/services/note.service';
 import { ActivatedRoute } from '@angular/router';
-import * as moment from 'moment';
 import { Location } from '@angular/common';
 
 @Component({
@@ -22,6 +21,10 @@ export class NewNotesComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
+    this.note = new Note();
+    this.note.comment = '';
+    this.note.title = '';
+
     if (id) {
       this.noteService.getNoteById(id).subscribe(n => {
         this.note = n;
@@ -29,11 +32,6 @@ export class NewNotesComponent implements OnInit {
         alert('Invalid id!');
         this.location.back();
       });
-    } else {
-      this.note = new Note();
-      this.note.id = '';
-      this.note.comment = '';
-      this.note.title = '';
     }
   }
 
@@ -48,7 +46,7 @@ export class NewNotesComponent implements OnInit {
       return;
     }
 
-    if(this.note.id === '') {
+    if(!this.note.id) {
         this.noteService.addNote(this.note)
         .subscribe(
           n => {

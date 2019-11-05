@@ -7,8 +7,8 @@ namespace server.Services
     {
         Note SaveNote(Note newNote);
         Category SaveCategory(Category newCategory);
-
         Note UpdateNote(Note updateNote);
+        Note GetNoteById(Guid id);
 
         List<Note> GetAllNotes();
         List<Category> GetAllCategory();

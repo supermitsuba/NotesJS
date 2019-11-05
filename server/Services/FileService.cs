@@ -74,6 +74,17 @@ namespace server.Services
             return this.GetAllObjects<Category>(this.categorySaveLocation);
         }
 
+        public Note GetNoteById(Guid id) {
+            var path = Path.Combine(this.noteSaveLocation, $"{id}.json");
+
+            if(!File.Exists(path))
+            {
+                throw new NotFoundException();
+            }
+
+            return JsonConvert.DeserializeObject<Note>(File.ReadAllText(path));
+        }
+
         public void DeleteNote(Guid id) {
             var path1 = Path.Combine(this.noteSaveLocation, $"{id}.json");
             var path2 = Path.Combine(this.noteNotActiveLocation, $"{id}.json");

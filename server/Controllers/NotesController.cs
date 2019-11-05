@@ -35,8 +35,8 @@ namespace server.Controllers
         }
 
         [HttpPut]
-        [Route("api/notes")]
-        public IActionResult Update(Note note)
+        [Route("api/notes/{id:Guid}")]
+        public IActionResult Update(Guid id, Note note)
         {
             var path = string.Format("{0}{1}", this.HttpContext.Request.Host, this.HttpContext.Request.Path);
             try
@@ -51,6 +51,20 @@ namespace server.Controllers
             {
                 return this.Conflict();
             }
+            return this.Ok(note);
+        }
+
+        [HttpGet]
+        [Route("api/notes/{id:Guid}")]
+        public IActionResult GetNoteById(Guid id) {
+            Note note = null;
+            try {
+                note = this.service.GetNoteById(id);
+            } catch (NotFoundException e)
+            {
+                this.NotFound("id");
+            }
+
             return this.Ok(note);
         }
 
